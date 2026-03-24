@@ -346,7 +346,7 @@ hr { border-color: var(--border) !important; margin: 1.5rem 0 !important; }
 
 @st.cache_resource(show_spinner=False)
 def load_predictor():
-    from drug_insight import DrugInsight
+    from drug_insight.predictor import DrugInsight
     return DrugInsight()
 
 
