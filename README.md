@@ -10,7 +10,7 @@ Install Git LFS first, then clone the repository:
 
 ```bash
 git lfs install
-git clone <your-repo-url>
+git clone https://github.com/AymanUzayr/DrugInsightv2.git
 ```
 
 Platform-specific install options:
@@ -52,7 +52,6 @@ The `src/` directory is the authoritative code path for the current app. There a
 |   |-- gnn_encoder.py            # Molecular graph encoder
 |   |-- ddi_classifier.py         # Pairwise interaction classifier
 |   |-- mol_graph.py              # SMILES -> graph conversion
-|-- data/processed/               # Processed CSV assets used by training/inference
 |-- models/ddi_model.pt           # Trained checkpoint
 |-- requirements.txt              # Python dependencies
 |-- druginsight/                  # Checked-in virtual environment (not source code)
@@ -140,8 +139,8 @@ Training currently:
 - saves the best checkpoint to `models/ddi_model.pt`
 
 ## Data Dependencies
-
-The repo expects these processed assets to exist in `data/processed`:
+Drugbank: https://go.drugbank.com/releases/help
+TWOSIDES: https://tatonettilab.org/offsides/
 
 - DrugBank interaction tables
 - DrugBank structure and lookup tables
