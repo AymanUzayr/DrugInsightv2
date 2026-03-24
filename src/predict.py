@@ -297,7 +297,12 @@ class DDIPredictor:
             'uncertainty': fusion['uncertainty'],
             'full_explanation': explanation['full_text'],
         }
-
+    def drug_names_with_smiles(self) -> list:
+        """Return only drug names that have valid SMILES — safe for prediction."""
+        return sorted(
+            name for db_id, name in self.feature_extractor.id_to_name.items()
+            if db_id in self.smiles_dict
+        )
 
 # ── CLI ───────────────────────────────────────────────────────────────────────
 def main():

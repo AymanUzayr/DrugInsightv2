@@ -4,6 +4,8 @@ import json
 import sys
 import os
 
+sys.path.append(os.path.join(os.path.dirname(__file__), 'src'))
+from predict import predict
 
 st.set_page_config(
     page_title="DrugInsight",
@@ -346,8 +348,8 @@ hr { border-color: var(--border) !important; margin: 1.5rem 0 !important; }
 
 @st.cache_resource(show_spinner=False)
 def load_predictor():
-    from drug_insight.predictor import DrugInsight
-    return DrugInsight()
+    from predict import predict
+    return predict
 
 
 
