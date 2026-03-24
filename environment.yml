@@ -1,0 +1,15 @@
+name: druginsight
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12
+  - rdkit
+  - pip
+  - pip:
+      - streamlit
+      - torch --index-url https://download.pytorch.org/whl/cpu
+      - torch-geometric
+      - numpy
+      - pandas
+      - scikit-learn
