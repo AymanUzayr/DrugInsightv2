@@ -2,15 +2,16 @@
 
 DrugInsight is a drug-drug interaction (DDI) prediction project built around a graph neural network, curated DrugBank-derived evidence, and TWOSIDES pharmacovigilance signals. The repository includes a Streamlit interface for interactive predictions, a CLI workflow for inference, and training scripts for rebuilding the model.
 
-## Important: Install Git LFS Before Cloning
-
-This repository contains large model and dataset files tracked with Git LFS.
-
-Install Git LFS first, then clone the repository:
+## Quick Start
 
 ```bash
 git lfs install
 git clone https://github.com/AymanUzayr/DrugInsightv2.git
+cd DrugInsightv2
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+streamlit run app.py
 ```
 
 Platform-specific install options:
@@ -162,14 +163,4 @@ Inference and training both depend on those files being present with the expecte
 - No lint or type-check configuration is currently defined.
 - The README now documents the current workflow, but some code paths still rely on hardcoded relative paths.
 
-## Quick Start
 
-```bash
-git lfs install
-git clone <your-repo-url>
-cd shiiiiii
-python -m venv .venv
-.venv\Scripts\activate
-pip install -r requirements.txt
-streamlit run streamlit_app.py
-```
