@@ -265,7 +265,7 @@ class DDIPredictor:
             'full_explanation': explanation['full_text'],
         }
 
-    def _direct_hit_result(self, context):
+    def _direct_hit_result(self, context, ml_prob=None):
         probability = 0.72
         probability += 0.05 * min(int(context.get('shared_major_cyp_count', 0)), 2)
         probability += 0.03 * min(int(context.get('shared_enzyme_count', 0)), 3)
@@ -279,13 +279,13 @@ class DDIPredictor:
 
         component_scores = {
             'rule_score': 1.0,
-            'ml_score': 0.0,
+            'ml_score': round(float(ml_prob), 4) if ml_prob is not None else 0.0,
             'twosides_score': self._twosides_score(context),
             'weights': {'rule': 1.0, 'ml': 0.0, 'twosides': 0.0},
         }
         uncertainty = {
             'drugbank_confidence': 'found',
-            'ml_confidence': 'not_run',
+            'ml_confidence': self._ml_confidence(ml_prob) if ml_prob is not None else 'not_run',
             'twosides_confidence': self._twosides_confidence(context),
             'overall_confidence': 'high',
             'confounding_flag': float(context.get('twosides_max_prr', 0.0) or 0.0) > 100,
@@ -436,19 +436,24 @@ class DDIPredictor:
         except ValueError as exc:
             return {'error': str(exc)}
 
+        has_smiles_a = context['drug_a']['id'] in self.smiles_dict
+        has_smiles_b = context['drug_b']['id'] in self.smiles_dict
+        
+        ml_prob = None
+        if has_smiles_a and has_smiles_b:
+            try:
+                ml_prob = self._run_model(context)
+            except Exception as exc:
+                if context['evidence_tier'] != 'tier_1_direct_drugbank':
+                    return {'error': f'Model inference failed: {exc}'}
+        else:
+            if context['evidence_tier'] != 'tier_1_direct_drugbank':
+                if not has_smiles_a:
+                    return {'error': f"No molecular structure available for {context['drug_a']['name']} ({context['drug_a']['id']})"}
+                return {'error': f"No molecular structure available for {context['drug_b']['name']} ({context['drug_b']['id']})"}
+
         if context['evidence_tier'] == 'tier_1_direct_drugbank':
-            return self._direct_hit_result(context)
-
-        if context['drug_a']['id'] not in self.smiles_dict:
-            return {'error': f"No molecular structure available for {context['drug_a']['name']} ({context['drug_a']['id']})"}
-        if context['drug_b']['id'] not in self.smiles_dict:
-            return {'error': f"No molecular structure available for {context['drug_b']['name']} ({context['drug_b']['id']})"}
-
-        try:
-            ml_prob = self._run_model(context)
-        except Exception as exc:
-            return {'error': f'Model inference failed: {exc}'}
-
+            return self._direct_hit_result(context, ml_prob)
         if context['evidence_tier'] == 'tier_2_evidence_fusion':
             return self._compute_fusion(context, ml_prob)
         return self._ml_only_result(context, ml_prob)
