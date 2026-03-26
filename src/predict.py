@@ -360,7 +360,7 @@ class DDIPredictor:
 
         confidence_scores = {
             'found': 3,
-            'partial': 2,
+            'inferred': 2,
             'not_found': 1,
             'high': 3,
             'moderate': 2,
@@ -368,7 +368,7 @@ class DDIPredictor:
             'no_signal': 1,
             'low': 1,
         }
-        drugbank_confidence = 'partial' if has_structural else 'not_found'
+        drugbank_confidence = 'inferred' if has_structural else 'not_found'
         ml_confidence = self._ml_confidence(ml_prob)
         twosides_confidence = self._twosides_confidence(context)
         avg_confidence = (
