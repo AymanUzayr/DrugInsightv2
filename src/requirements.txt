@@ -1,10 +1,7 @@
-streamlit
---extra-index-url https://download.pytorch.org/whl/cpu
-torch==2.6.0+cpu
-torch-geometric
+fastapi
+uvicorn
+torch==2.1.0
 numpy
 pandas
 scikit-learn
 rdkit-pypi
-fastapi
-uvicorn
